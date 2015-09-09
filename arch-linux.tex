@@ -1,0 +1,174 @@
+\documentclass[mathserif]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usetheme{Luebeck}
+\title{Arch Linux}
+\author{Jack Rosenthal}
+\institute{CSM Linux Users Group}
+\date{10 September 2015}
+\beamertemplatenavigationsymbolsempty
+\begin{document}
+
+\begin{frame}
+\titlepage
+Slides available online at:
+
+\small
+\tt https://github.com/jackrosenthal/lug-arch-presentation
+\end{frame}
+
+\begin{frame}
+    \frametitle{What makes Arch different?}
+    \pause
+    \begin{itemize}[<+->]
+        \item Arch Linux is a \emph{lightweight} Linux distribution with a
+            \emph{Keep it Simple} philosophy.
+        \item Arch only provides you with a minimal base system, allowing you
+            to pick and choose what you would like to install.
+        \item Arch is a rolling release system, so you will never have to
+            upgrade to a new version of Arch.
+        \item Most system configuration is performed from the shell by editing
+            simple text files.
+        \item Arch strives to stay bleeding edge, and typically offers the
+            latest stable versions of most software.
+        \item Arch isn't just a Linux distribution, Arch is a lifestyle.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Package Management}
+    Unlike Windows and OS X, most Linux distributions include a package
+    manager. A package manager allows you to install and update software
+    without going through websites and untrusted install files.
+
+    \pause
+    \textbf{Installing software (PDF viewer) on Windows}
+    \begin{enumerate}
+        \item Open a web browser \pause
+        \item Do a web search for Adobe Reader \pause
+        \item Go to the webpage for Adobe Reader \pause
+        \item Click download \pause
+        \item Run \texttt{adobereader\_installer.exe} \break {\small Yikes! Who knows
+            what this will do to your computer!} \pause
+        \item Untick all the McAffe and other bloatware \pause
+        \item Profit? \pause Not really... What happens when you need to update
+            everything on your system?
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Package Managment}
+    \textbf{Installing a PDF viewer on Arch Linux}
+    \begin{enumerate}[<+->]
+        \item Open your terminal and run \break
+            \texttt{pacman -S zathura} (one of my favourite PDF viewers)
+        \item Pacman will tell you how much data it will need to download and
+            the total installed size, and additonally any dependencies zathura
+            will need to run. Just press \texttt{y} to confirm you would like
+            all this.
+    \end{enumerate}
+    \pause Better yet, when you need to update everything on your system, just run
+    \break
+    \texttt{pacman -Syu}
+\end{frame}
+
+\newcounter{enumresume}
+\begin{frame}
+    \frametitle{Installing Arch}
+    \begin{enumerate}[<+->]
+        \item Visit \texttt{https://www.archlinux.org} and download the latest
+            ISO. Copy this to a USB or other installation media.
+        \item Boot the installation media. Arch just gives you \texttt{zsh} and
+            a few convenient programs to install.
+        \item Load your keyboard layout using \texttt{loadkeys}.
+        \item Connect to the network. You will need to start dchpcd on your
+            interface if you use DHCP.
+        \item Partition your drive using your favourite (and
+            appropriate) tool (ex. \texttt{cgdisk})
+        \item Format your partitions using the filesystem of your choice. You
+            may choose to use LUKS for full disk encryption.
+        \setcounter{enumresume}{\value{enumi}}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Installing Arch}
+    \begin{enumerate}[<+->]
+            \setcounter{enumi}{\value{enumresume}}
+        \item Mount your root filesystem at \texttt{/mnt}\\
+            \texttt{\# mount /dev/sdxY /mnt}
+        \item Mount any remaining partitions in their respective location in
+            \texttt{/mnt}.\\
+            \texttt{\# mkdir -p /mnt/boot\\\# mount /dev/sdxZ /mnt/boot}
+        \item Edit \texttt{/etc/pacman.d/mirrorlist} and uncomment some good
+            mirrors.
+        \item \texttt{\# pacstrap -i /mnt base base-devel zsh vim}
+        \item Generate your fstab. Check for errors afterwards.\\
+            \texttt{\# genfstab -U /mnt > /mnt/etc/fstab}
+    \end{enumerate}
+\end{frame}
+\setcounter{enumresume}{\value{enumi}}
+
+\begin{frame}
+    \frametitle{Installing Arch}
+    \begin{enumerate}[<+->]
+            \setcounter{enumi}{\value{enumresume}}
+        \item \texttt{chroot} into your system.
+            \texttt{arch-chroot /mnt /usr/bin/zsh}
+        \item Edit \texttt{/etc/locale.gen} and uncomment the locale of your
+            choice.
+        \item \texttt{\# locale-gen}
+        \item \texttt{\# echo LANG=en\_US.UTF-8 > /etc/locale.conf}
+        \item Edit \texttt{/etc/vconsole.conf} and include your keyboard
+            layout.\\
+            \texttt{KEYMAP=wuly}
+        \item \texttt{\# ln -sf /usr/share/zoneinfo/\emph{Zone}/\emph{SubZone} /etc/localtime}
+        \item \texttt{\# hwclock --sys-to-hc --utc}
+        \item Install bootloader
+        \item Configure network
+        \item \texttt{\# passwd}
+        \item \texttt{\# exit}
+        \item \texttt{\# reboot}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Post-installation Recommendations}
+    \begin{itemize}[<+->]
+        \item Create another user for yourself
+        \item Install a display server (X.org, wayland)
+        \item Install a login manager (SLiM, xdm, SDDM, lightdm, etc.)
+        \item Install a window manager (i3, xmonad, GNOME, etc.)
+        \item Install useful programs (dmenu, Firefox, \TeX live, Python, etc.)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{When things go wrong...}
+    \pause
+    Error messages can be terrifying when you aren't prepared for them;
+    but they can be fun when you have the right attitude. Just remember that
+    you really haven't hurt the computer's feelings, and that nobody will
+    hold the errors against you.
+
+    --- D. E. Knuth, the \TeX book, p. 30
+\end{frame}
+
+\begin{frame}
+    \frametitle{How to get help}
+    \begin{itemize}
+        \item Come to LUG!
+        \item Send mail to our mailing list:\\
+            \texttt{lug@mailman.mines.edu}
+        \item Check the Arch Wiki:\\
+            \texttt{https://wiki.archlinux.org}
+        \item Post on the Arch BBS:\\
+            \texttt{https://bbs.archlinux.org}
+        \item Linux \& Unix Stack Overflow:\\
+            \texttt{http://unix.stackexchange.com}
+        \item The Linux Documentation Project\\
+            \texttt{http://tldp.org}
+    \end{itemize}
+\end{frame}
+
+\end{document}
