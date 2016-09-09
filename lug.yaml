@@ -1,0 +1,7 @@
+Title: Arch Linux
+Description: A presentation to sell you on Arch Linux
+Date: 2015-09-10
+Thumbnail: arch.png
+Files:
+    LaTeX: arch-linux.tex
+    SlidesPDF: arch-linux.pdf
